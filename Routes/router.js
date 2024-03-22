@@ -15,4 +15,9 @@ router.post('/user/register',inputValidateMiddleware,userController.registerUser
 
 router.post('/user/login',userController.loginUser)
 
+
+// edit password
+
+router.put('/user/password-edit',inputValidateMiddleware,jwtMiddleware,userController.editPassword)
+
 module.exports = router;

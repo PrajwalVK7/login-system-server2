@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-
+const bcrypt = require('bcrypt')
 const users = require('../Model/userSchema');
 
 
@@ -18,12 +18,13 @@ exports.registerUser = async (req, res) => {
             res.status(406).json("Username already exists, please login or create use another")
         }
         else {
+            const hashedPassword =await bcrypt.hash(password,10);
             const newUser = new users({
                 name,
                 address,
                 gender,
                 username,
-                password
+                password:hashedPassword
             })
             await newUser.save();
             res.status(200).json('User signup successfull')
@@ -37,27 +38,39 @@ exports.registerUser = async (req, res) => {
 
 
 exports.loginUser = async (req, res) => {
-    console.log(req.body)
-
     const { username, password } = req.body;
 
     try {
-        console.log("inside login")
-        const existingUser = await users.findOne({ username, password })
+        const existingUser = await users.findOne({ username });
 
-        if (existingUser) {
+        if (!existingUser) {
+            return res.status(406).json("Invalid username or password");
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, existingUser.password);
+
+        if (isPasswordValid) {
             const token = jwt.sign({ userId: existingUser._id }, process.env.SECRET_KEY);
-            console.log(token);
-            return res.status(200).json({token });
+            return res.status(200).json({ token });
+        } else {
+            return res.status(406).json("Invalid username or password");
         }
-        else {
-            res.status(406).json("Invalid username or Password");
-        }
-
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json("Internal Server Error");
     }
-    catch (err) {
-        console.log(err)
-        res.status(401).json(err)
+}
 
-    }
+
+
+exports.editPassword = async(req,res)=>{
+    const userId = req.payload;
+    console.log(userId)
+
+    // try{
+    // }
+    // catch(err){
+    //     res.status(401).json(err)
+
+    // }
 }
