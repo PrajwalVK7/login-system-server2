@@ -5,7 +5,7 @@ const jwtMiddleware = (req,res,next)=>{
 
     try{
         const jwtResponse = jwt.verify(token,process.env.SECRET_KEY);
-        req.payload = jwtResponse.userID;
+        req.payload = jwtResponse.userId;
         next()
     }
     catch(err){

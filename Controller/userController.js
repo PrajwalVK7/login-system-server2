@@ -18,13 +18,13 @@ exports.registerUser = async (req, res) => {
             res.status(406).json("Username already exists, please login or create use another")
         }
         else {
-            const hashedPassword =await bcrypt.hash(password,10);
+            const hashedPassword = await bcrypt.hash(password, 10);
             const newUser = new users({
                 name,
                 address,
                 gender,
                 username,
-                password:hashedPassword
+                password: hashedPassword
             })
             await newUser.save();
             res.status(200).json('User signup successfull')
@@ -63,14 +63,31 @@ exports.loginUser = async (req, res) => {
 
 
 
-exports.editPassword = async(req,res)=>{
+
+exports.editPassword = async (req, res) => {
+    console.log("inside editPassword");
     const userId = req.payload;
-    console.log(userId)
+    console.log(userId);
 
-    // try{
-    // }
-    // catch(err){
-    //     res.status(401).json(err)
+    try {
+        const { oldPassword, newPassword } = req.body;
 
-    // }
-}
+        const existingUser = await users.findById(userId);
+        if (existingUser) {
+            const isPasswordValid = await bcrypt.compare(oldPassword, existingUser.password);
+            if (isPasswordValid) {
+                const newHashedPassword = await bcrypt.hash(newPassword, 10);
+                existingUser.password = newHashedPassword;
+                await existingUser.save();
+                res.status(200).json("Password updated successfully");
+            } else {
+                res.status(406).json("Old password is incorrect");
+            }
+        } else {
+            res.status(404).json("User not found");
+        }
+    } catch (err) {
+        console.log(err);
+        res.status(500).json(err.message);
+    }
+};
