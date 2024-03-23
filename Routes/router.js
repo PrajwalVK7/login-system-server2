@@ -6,6 +6,7 @@ const userController = require('../Controller/userController')
 const express = require('express');
 const jwtMiddleware = require('../Middlewares/jwtMiddleware');
 const eventController = require('../Controller/eventController')
+const multConfigure= require('../Middlewares/multerMiddleware')
 const router = new express.Router();
 
 // register 
@@ -23,5 +24,5 @@ router.put('/user/password-edit',inputValidateMiddleware,jwtMiddleware,userContr
 
 // register event 
 
-router.post('/user/register-event',inputValidateMiddleware,jwtMiddleware,eventController.registerEvent)
+router.post('/user/register-event',multConfigure.single('file'),inputValidateMiddleware,jwtMiddleware,eventController.registerEvent)
 module.exports = router;

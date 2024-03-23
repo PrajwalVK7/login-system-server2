@@ -1,10 +1,7 @@
-const multer = require('multer');
+const multer = require('multer')
 
 const storage = multer.diskStorage({
     destination: (req, file, callback) => {
-        console.log("Req body",req.body); 
-    console.log(req.files); 
-
         callback(null, './uploads')
     },
     filename: (req, file, callback) => {
@@ -15,7 +12,7 @@ const storage = multer.diskStorage({
 
 
 const fileFilter = (req, file, callback) => {
-    if (file.mimetype == 'file/pdf' || file.mimetype == 'image/doc' || file.mimetype == 'image/docx') {
+    if (file.mimetype == 'application/pdf' || file.mimetype == 'application/doc' || file.mimetype == 'application/docx') {
            callback(null, true)
 
     }

@@ -12,6 +12,11 @@ const eventSchema = new mongoose.Schema({
         type:String,
         require:true,
     },
+    email:{
+        type:String,
+        require:true,
+        unique:true
+    },
     file:{
         type:String,
         require:true,
