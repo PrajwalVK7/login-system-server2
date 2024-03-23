@@ -5,7 +5,7 @@ const userController = require('../Controller/userController')
 
 const express = require('express');
 const jwtMiddleware = require('../Middlewares/jwtMiddleware');
-
+const eventController = require('../Controller/eventController')
 const router = new express.Router();
 
 // register 
@@ -20,4 +20,8 @@ router.post('/user/login',userController.loginUser)
 
 router.put('/user/password-edit',inputValidateMiddleware,jwtMiddleware,userController.editPassword)
 
+
+// register event 
+
+router.post('/user/register-event',inputValidateMiddleware,jwtMiddleware,eventController.registerEvent)
 module.exports = router;

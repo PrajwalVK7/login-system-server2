@@ -9,6 +9,8 @@ server.use(cors());
 require('./DB/connection')
 server.use(express.json());
 server.use(router);
+server.use('/uploads',express.static('./uploads'))
+
 
 
 
