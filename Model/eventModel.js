@@ -6,7 +6,7 @@ const eventSchema = new mongoose.Schema({
     title:{
         type:String,
         require:true,
-        unique:true
+
     },
     description:{
         type:String,
@@ -15,7 +15,6 @@ const eventSchema = new mongoose.Schema({
     email:{
         type:String,
         require:true,
-        unique:true
     },
     file:{
         type:String,
